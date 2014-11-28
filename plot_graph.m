@@ -1,0 +1,73 @@
+load ('Data_m1_p3.mat');
+figure('Units', 'pixels', 'Position', [100 100 500 375]);
+axis([0 5000 0 105]);
+hold on;
+
+protocol = 1;
+Simple_LEACH = line (Number_Nodes_Alive (protocol, :, 1), Number_Nodes_Alive (protocol, :, 2));
+% Simple_LEACH_2 = scatter (Number_Nodes_Alive (protocol, 500:1000:7000, 1), Number_Nodes_Alive (protocol, 500:1000:7000, 2),'Marker', 'o', 'MarkerEdgeColor', 'Blue');
+
+protocol =  protocol  + 1;
+LEACH = line (Number_Nodes_Alive (protocol, :, 1), Number_Nodes_Alive (protocol, :, 2));
+% LEACH_2 = scatter (Number_Nodes_Alive (protocol, 500:1000:7000, 1), Number_Nodes_Alive (protocol, 500:1000:7000, 2),'Marker', '+', 'MarkerEdgeColor', 'Red');
+
+protocol =  protocol  + 1;
+SEP = line (Number_Nodes_Alive (protocol, :, 1), Number_Nodes_Alive (protocol, :, 2));
+SEP_2 = scatter (Number_Nodes_Alive (protocol, 1:500:7000, 1), Number_Nodes_Alive (protocol, 1:500:7000, 2),'Marker', '*', 'MarkerEdgeColor', 'Black');
+
+protocol =  protocol  + 1;
+FAIR = line (Number_Nodes_Alive (protocol, :, 1), Number_Nodes_Alive (protocol, :, 2));
+% FAIR_2 = scatter (Number_Nodes_Alive (protocol, 500:1000:7000, 1), Number_Nodes_Alive (protocol, 500:1000:7000, 2),'Marker', 's', 'MarkerEdgeColor', 'Black');
+
+protocol =  protocol  + 1;
+CRP = line (Number_Nodes_Alive (protocol, :, 1), Number_Nodes_Alive (protocol, :, 2));
+% CRP_2 = scatter (Number_Nodes_Alive (protocol, 500:1000:7000, 1), Number_Nodes_Alive (protocol, 500:1000:7000, 2),'Marker', 'd', 'MarkerEdgeColor', 'Black');
+
+% Adjust Line Properties (Functional)
+set (Simple_LEACH, 'Color', 'Blue', 'LineStyle' , ':');
+set (LEACH, 'Color', 'Red', 'LineStyle' , '-.');
+set (SEP, 'Color', 'Green');
+% set (SEP_2, 'CData', 'Green');
+set (FAIR, 'Color', 'Black', 'LineStyle' , '--');
+set (CRP, 'Color', 'Black');
+
+% Add Legend and Labels
+hTitle  = title ('number of alive nodes per round');
+hXLabel = xlabel('number of rounds'                     );
+hYLabel = ylabel('number of alive nodes'                      );
+
+hLegend = legend( ...
+  [Simple_LEACH, LEACH, SEP_2, FAIR, CRP], ...
+  'LEACH       m = 0 \alpha= 0' , ...
+  'LEACH       m = 0.1 \alpha= 3'      , ...
+  'SEP         m = 0.1 \alpha= 3'       , ...
+  'FAIR'    , ...
+  'CRP         m = 0.1 \alpha= 3'                , ...
+  'location', 'NorthEast' );
+
+
+% Adjusting font and axis properties 
+set([hTitle, hXLabel, hYLabel], ...
+    'FontName'   , 'AvantGarde');
+set([hXLabel, hYLabel]  , ...
+    'FontSize'   , 10          );
+set(gca  , ...
+    'FontSize'   , 10          );
+set(gca, ...
+  'Box'         , 'on'     , ...
+  'TickDir'     , 'out'     , ...
+  'TickLength'  , [.02 .02] , ...
+  'XMinorTick'  , 'off'      , ...
+  'YMinorTick'  , 'off'      , ...
+  'YGrid'       , 'on'      , ...
+  'XGrid'       , 'off', ...
+  'XColor'      , [.3 .3 .3], ...
+  'YColor'      , [.3 .3 .3], ...
+  'YTick'       , 0:10:100, ...
+  'XTick'       , 0:1000:7000, ...
+  'LineWidth'   , 1         );
+
+% Conversion to .eps
+set(gcf, 'PaperPositionMode', 'auto');
+print -depsc2 ./SEP_plots/plot_p2_3.eps
+% close;

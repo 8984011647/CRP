@@ -1,0 +1,62 @@
+load ('SP_vary_Nodes.mat')
+Final_SP = strcat ('C:/Users/RaviHome/Desktop/SEP/Code/Data/Stability Period/VaryNodes/data_final_CRP', '.txt');  
+File_SP = fopen (Final_SP, 'w');
+
+Final_File_Name_AFrac = strcat ('C:/Users/RaviHome/Desktop/SEP/Code/Data/Fraction Of Nodes Cluster Heads/VaryNodes/data_final_CRP', '.txt');    
+Final_File_AFrac = fopen (Final_File_Name_AFrac, 'w');
+
+Final_File_Name_AveStdResEnergy = 'C:/Users/RaviHome/Desktop/SEP/Code/Data/Standard Deviation Residual Energy/VaryNodes/data_final_CRP.txt';        
+Final_File_AveStdDevResEnergy = fopen (Final_File_Name_AveStdResEnergy, 'w');
+
+
+Final_File_Name_AveCHE = strcat ('C:/Users/RaviHome/Desktop/SEP/Code/Data/Cluster Head Energy/VaryNodes/data_final_CRP.txt');    
+Final_File_AveCHE = fopen (Final_File_Name_AveCHE, 'w');
+
+Iteration_Max = 9;        
+Max_Protocol = 5;
+Average_Stability_Period = zeros (Max_Protocol, Iteration_Max, 2);
+Average_A_Frac = zeros (Max_Protocol, Iteration_Max, 2);
+Average_Cluster_Head_Energy_Mean = zeros (Max_Protocol, Iteration_Max, 2);
+Average_Std_Res_Energy = zeros (Max_Protocol, Iteration_Max, 2);
+step = 50;
+init =100;
+for a = 1 : Iteration_Max
+        nodes = init + step * (a-1);  
+        
+        fprintf (File_SP, '%f\t',  nodes);
+        fprintf (Final_File_AFrac, '%f\t',  nodes);
+        fprintf (Final_File_AveCHE, '%f\t',  nodes);
+        fprintf (Final_File_AveStdDevResEnergy, '%f\t',  nodes);
+        
+        for protocol = 5 : 5
+            Average_Stability_Period (protocol, a, 1) = nodes;
+            Average_Stability_Period (protocol, a, 2) = round(mean(Stability_Period(protocol, :, a, 1)));
+            
+            Average_Cluster_Head_Energy_Mean(protocol, a, 1) = nodes;
+            Average_Cluster_Head_Energy_Mean(protocol, a, 2) = mean(Average_Cluster_Head_Energy (protocol, a, :, 2));
+            
+            Average_Std_Res_Energy(protocol, a, 1) = nodes;
+            Average_Std_Res_Energy(protocol, a, 2) = mean(Average_Std_Dev_Residual_Energy  (protocol, a, :, 2));
+            
+            Average_A_Frac(protocol, a, 1) = nodes;
+            Average_A_Frac(protocol, a, 2) = mean (Frac_Advance_Nodes  (protocol, a, :, 2));
+            
+            
+            fprintf (File_SP, '%d\t', round(max(Stability_Period(protocol, :, a, 1))));
+            fprintf (Final_File_AFrac, '%f\t',  Average_A_Frac(protocol, a, 2));
+            fprintf (Final_File_AveCHE, '%f\t', Average_Cluster_Head_Energy_Mean (protocol, a, 2));
+            fprintf (Final_File_AveStdDevResEnergy, '%f\t', Average_Std_Res_Energy(protocol, a, 2));
+            
+        end
+        fprintf (File_SP, '\r\n');
+        fprintf (Final_File_AFrac, '\r\n');
+        fprintf (Final_File_AveCHE, '\r\n');
+        fprintf (Final_File_AveStdDevResEnergy, '\r\n');        
+end
+fclose (Final_File_AveStdDevResEnergy);
+fclose (File_SP);
+fclose (Final_File_AveCHE);
+fclose (Final_File_AFrac);
+
+
+% plot (Average_Std_Res_Energy (3, :, 1), Average_Std_Res_Energy (3, :, 2));

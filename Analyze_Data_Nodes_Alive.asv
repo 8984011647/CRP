@@ -1,0 +1,12 @@
+% Analyze the data for A Particular Iteration  m=2,a =1
+load ('Data_Per_Iteration_m2_a1');
+File_Nodes_Alive = fopen ('', 'w');
+rmax=7000;
+for i = 1 : rmax
+    fprintf (File_Nodes_Alive, '%d\t',  ;
+    for protocol = 1 : 5
+        fprintf (File_Nodes_Alive, '%d\t', Number_Nodes_Alive (protocol, r, 1));
+    end
+    fprintf (File_Nodes_Alive, '\r\n');
+end
+fclose (File_Nodes_Alive);
